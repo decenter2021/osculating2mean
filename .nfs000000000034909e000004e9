@@ -1,3 +1,4 @@
+#define DATA_PATH './data/egm96_degree360.ascii'
 C===============================================================================
 c This program is a modified version of perturb_t2 written by Professor Cheinway
 c Hwang. The program was modified by Leonardo Pedroso on June 2022.
@@ -97,15 +98,8 @@ c Set inputs
    	lmax = y(8,1)
 
       
-c Set parameters
-
-c the code between begin and end below is automaticaly generated, do not
-c change the structure
-c begin data path
-      ifile1 = '/mnt/nfs/home/lpedroso/Desktop/osculatin'//
-     1 'g2mean/data/egm96_degree360.ascii'
-c end data path
-
+c Set parameters './data/egm96_degree360.ascii'
+  	ifile1 = DATA_PATH;
 c ------------------------------------------------------------------------------
 
 c 	Validate input degree
@@ -1010,4 +1004,6 @@ c      write(0,*)'-Q max of q index in the eccentricity function [default:1]'
 
       return
       end 
+      
+
 

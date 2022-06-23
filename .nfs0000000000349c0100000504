@@ -102,8 +102,7 @@ c Set parameters
 c the code between begin and end below is automaticaly generated, do not
 c change the structure
 c begin data path
-      ifile1 = '/mnt/nfs/home/lpedroso/Desktop/osculatin'//
-     1 'g2mean/data/egm96_degree360.ascii'
+	ifile = '
 c end data path
 
 c ------------------------------------------------------------------------------
