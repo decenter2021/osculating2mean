@@ -65,8 +65,6 @@ The documentation is divided into the following categories:
 - [Osculating elements from position-vector](#osculating-elements-from-position-vector)
 - [Eckstein-Ustinov J2 Perturbations](#eckstein-ustinov-j2-perturbations)
 - [Kaula Spherical Harmonics Geopotential Perturbations](#kaula-spherical-harmonics-geopotential-perturbations)
-- [Chania urban road network](#chania-urban-road-network)
-- [Example](#example)
 
 ### Osculating elements from position-vector
 
