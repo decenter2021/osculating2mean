@@ -1,8 +1,5 @@
 # 🛰 osculating2mean
 
-to do:
-- gitignove asm, figures, ds stroes
-
 ## 🎯 Features
 - Convert **osculating orbital elements** to/from **mean orbital elements** using spherical harmonics Earth gravity potential in MATLAB.
 
@@ -14,7 +11,8 @@ to do:
 - [Contact](#-contact)
 - [Installation](#-installation)
 - [Documentation](#-documentation)
-- [Contributing to SAFFRON](#-contributing-to-saffron)
+- [Example](#-example)
+- [Contributing to osculating2mean](#-contributing-to-osculating2mean)
 - [Lincense](#-license)
 - [References](#-references)
 
@@ -64,24 +62,168 @@ Important notes:
 
 ## 📖 Documentation
 The documentation is divided into the following categories:
-- [Model synthesis](#model-synthesis)
-- [Utilities](#utilities)
-  * [Network properties](#network-properties)
-  * [Performance metrics](#performance-metrics)
-  * [Quadratic continuous knapsack solver](#quadratic-continuous-knapsack-solver)
-- [Simulation script](#simulation-script)
+- [Osculating elements from position-vector](#osculating-elements-from-position-vector)
+- [Eckstein-Ustinov J2 Perturbations](#eckstein-ustinov-j2-perturbations)
+- [Kaula Spherical Harmonics Geopotential Perturbations](#kaula-spherical-harmonics-geopotential-perturbations)
 - [Chania urban road network](#chania-urban-road-network)
 - [Example](#example)
 
-### Model synthesis
+### Osculating elements from position-vector
 
+To compute the **osculating orbital elements** from a **position-velocity** vector use the function below.
+```
+OE = rv2OEOsculating(x)
+```
+where ```x``` is a $6\times 1$ **position-velocity** vector in **SI units** and ``OE`` is a $6\times 1$ vector of **non-singular orbital elements**, for near-circular orbits, *i.e.*, 
+ - $a$: semi-major axis [m]
+ - $u$: $\omega + M$ ($\omega$: argument of perigee; $M$: mean anomaly) [rad]
+ - $e_x$: $e\cos(\omega)$ ($e$: excentricity)
+ - $e_y$: $e\sin(\omega)$
+ - $i$: inclination [rad]
+ - $\Omega$: longitude of ascending node [rad]
+ 
+ Implementation adapted from [(Vallado, 1997)](#-references).
+ 
+>Example: *compute the osculating orbital elements from a position-velocity vector*
+>```
+>>> x = 1.0e+06 * ...
+>   [6.4329;
+>   -1.5777;
+>   -2.0041;
+>    0.0028;
+>    0.0042;
+>    0.0056];
+>>> OE = rv2OEOsculating(x);
+>>> OE(1)
+>ans =
+>   6.9195e+06
+>>> OE(2:6)
+>ans =
+>    5.9111
+>   -0.0003
+>   -0.0004
+>    0.9249
+>    6.2728
 
 ***
-  
-## Example
+ 
+### Eckstein-Ustinov J2 Perturbations
 
+To compute the Eckstein-Ustinov first order perturbations due to $J_2$ use 
+```
+EUPerturbations =  EcksteinUstinovPerturbations(OEMean)
+```
+where ```OEMean``` are the non-singular mean orbital elements for which the perturbation is computed and ```EUPerturbations``` are the perturbations to the mean orbital elements. This function is implemented according to [(Eckstein and Hechler, 1970)](#-references).
+ 
+To iteratively convert from position-velocity (or, equivalently, osculating orbital elements) to mean orbital elements, taking into account the Eckstein-Ustinov $J_2$ perturbations use 
+```
+OEMean = rv2OEMeanEcksteinUstinov(x)
+```
+where ```x``` is a $6\times 1$ **position-velocity** vector in **SI units** and ``OE`` is a $6\times 1$ vector of **non-singular mean orbital elements**, for near-circular orbits.
+ 
+To adjust the maximum number of iterations and convergence criteria, it is also possible to set additional arguments 
+```
+OEMean = rv2OEMeanEcksteinUstinov(x, MaxIt, epslPos, epslVel)
+```
+For more details, see the thorough comments in the source code of this function.
+ 
+>Example: *compute the mean orbital elements taking into account the Eckstein-Ustinov J2 perturbations*
+>```
+>>> x = 1.0e+06 * ...
+>   [6.4329;
+>   -1.5777;
+>   -2.0041;
+>    0.0028;
+>    0.0042;
+>    0.0056];
+>>> OEMean = rv2OEMeanEcksteinUstinov(x);
+>>> OEMean(1)
+>ans =
+>   6.9150e+06
+>>> OEMean(2:6)
+>ans =
+>    5.9114
+>   -0.0007
+>   -0.0000
+>    0.9247
+>    6.2730
+ 
+***
+ 
+### Kaula Spherical Harmonics Geopotential Perturbations
 
-  
+To compute the spherical harmonics geopotential perturbations to the mean orbital elements according to [(Kaula, 2013)](#-references) use 
+```
+dOE = KaulaGeopotentialPerturbations(t_tdb,OEmean,degree)
+```
+where ```t_tdb``` is the dynamic baricentric time since J200 in seconds, ```OEMean``` are the non-singular mean orbital elements for which the perturbation is computed, ```degree``` is the maximum degree of the spherical harmonics geopotential model, and ```dOE``` are the perturbations to the following ordered set of orbital elements:
+ - $a$ (semi-major axis) [m]
+ - $e$ (excentricity)
+ - $i$ (inclination) [rad]
+ - $\Omega$ (longitude of ascending node) [rad]
+ - $\omega$ (argument of perigee) [rad]
+ - $M$ (mean anomaly) [rad]
+ 
+The [EGM96 NASA GSFC and NIMA Joint Geopotential Model](https://cddis.nasa.gov/926/egm96/) is used.
+
+The backbone of this function is implemented in FORTRAN, whose source code is based on the programs published in [(Hwang and Hwang, 2002)](#-references). The FORTRAN code is called from MATLAB using a MEX function. 
+
+To convert from position-velocity (or, equivalently, osculating orbital elements) to mean orbital elements, taking into account the spherical harmonics geopotential perturbations use 
+```
+OEMean = rv2OEMeanEcksteinUstinovKaula(t_tdb,x,degree) 
+```
+where the arguments are the same as those of function ```KaulaGeopotentialPerturbations``` and ```OEMean``` is a $6\times 1$ vector of **non-singular mean orbital elements**, for near-circular orbits.
+ 
+This conversion is performed in 3 steps as proposed in [(Spiridonova, Kirschner and Hugentobler, 2014)](#-references):
+- Iteratively compute the mean orbital elements taking into account the Eckstein-Ustinov J2 perturbations
+- Compute the Kaula geopotential perturbations corresponding to the Eckstein-Ustinov mean orbital elements 
+- Compute the mean orbital elements by subtracting the perturbations to the osculating orbital elements
+ 
+>Example: *compute the mean orbital elements taking into account the Kaula Spherical Harmonics Geopotential Perturbations*
+>```
+>>> x = 1.0e+06 * ...
+>   [6.4329;
+>   -1.5777;
+>   -2.0041;
+>    0.0028;
+>    0.0042;
+>    0.0056];
+>>> OEMean = rv2OEMeanEcksteinUstinovKaula(11100,x,10)
+>>> OEMean(1)
+>ans =
+>   6.9150e+06
+>>> OEMean(2:6)
+>ans =
+>    5.9114
+>   -0.0007
+>   -0.0000
+>    0.9247
+>    6.2730
+ 
+*** 
+ 
+## 🦆 Example
+ 
+In this example, which can be run with
+ ``` 
+ example_osculating2mean
+ ``` 
+the osculating, mean Eckstein-Ustinov, and mean Eckstein-Ustinov-Kaula orbital elements are compared for a time-series of roughly 10 orbits of a satellite in LEO. The time-series were obtain with a simulation in [TUDAT](https://tudat-space.readthedocs.io/en/latest/) considering:
+ - atmospheric drag
+ - cannon ball solar radiation pressure
+ - third body perturbations from the Sun, Moon, Mars, Venus
+ - spherical harmonic gravity up to degree and order 12
+
+ The evolution of the non-singular orbital elements is depicted below
+ 
+![a](https://user-images.githubusercontent.com/40807922/175348654-3d31489a-40ec-4225-b26b-adb244f2e5b7.svg)
+![a_zoom](https://user-images.githubusercontent.com/40807922/175348655-1852bd1c-870b-47f0-9910-1024b93a97e8.svg)
+![u](https://user-images.githubusercontent.com/40807922/175348627-1d4106da-7657-4221-8cfa-57cb0db738ea.svg) 
+![ex](https://user-images.githubusercontent.com/40807922/175348652-9b09ac61-fbea-4422-b6b2-b8120e99be7b.svg)
+![ey](https://user-images.githubusercontent.com/40807922/175348649-fbc9ab18-e36a-4b48-9421-37b609817601.svg)
+![i](https://user-images.githubusercontent.com/40807922/175348646-940e4843-0022-4239-926b-68bfd851d1b4.svg)
+![Omega](https://user-images.githubusercontent.com/40807922/175348644-377a2ff5-2bb7-48ed-9ec4-59ae0630f47f.svg)
+
 ***
   
 ## ✨ Contributing to **osculating2mean**
@@ -99,18 +241,23 @@ To contribute to **osculating2mean**
 ***
 
 ## 📄 License
-[MIT License](https://github.com/decenter2021/SAFFRON/blob/master/LICENSE)
+[MIT License](https://github.com/decenter2021/osculating2mean/blob/master/LICENSE)
 
 ***
 
 ## 💥 References 
 <p align="justify">
-<a href="https://elib.dlr.de/103814/1/Spiridonova_ISSFD_2014_upd.pdf">Spiridonova, S., Kirschner, M. and Hugentobler, U., 2014. Precise mean orbital elements determination for LEO monitoring and maintenance.</a>
+
   
-M.C. Eckstein, H. Hechler, A reliable derivation of the perturbations due to any zonal and tesseral harmonics of the geopotential for nearly-circular satellite orbits, ESOC, ESRO SR-13 (1970).
- 
-Kaula, W.M., 2013. Theory of satellite geodesy: applications of satellites to geodesy. Courier Corporation.
+Eckstein, M.C., Hechler, H., 1970. A reliable derivation of the perturbations due to any zonal and tesseral harmonics of the geopotential for nearly-circular satellite orbits, ESOC, ESRO SR-13.
   
 <a href="https://doi.org/10.1016/S0098-3004(01)00053-X">Hwang, C. and Hwang, L.S., 2002. Satellite orbit error due to geopotential model error using perturbation theory: applications to ROCSAT-2 and COSMIC missions. Computers & geosciences, 28(3), pp.357-367.</a>
+ 
+Kaula, W.M., 2013. Theory of satellite geodesy: applications of satellites to geodesy. Courier Corporation.
+
+<a href="https://elib.dlr.de/103814/1/Spiridonova_ISSFD_2014_upd.pdf">Spiridonova, S., Kirschner, M. and Hugentobler, U., 2014. Precise mean orbital elements determination for LEO monitoring and maintenance.</a>
+
+Vallado, D.A., 1997. Fundamentals of astrodynamics and applications. McGraw-Hill.
+ 
 
 </p> 
