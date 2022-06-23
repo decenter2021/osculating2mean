@@ -9,11 +9,13 @@ while 1
     else
         aux = sprintf('%s/data/egm96_degree360.ascii',pwd);
         fprintf(fid2,"c begin data path\n"); 
-        fprintf(fid2, "      ifile1 = '%s'", aux(1:min(40,length(aux))));
-        idxChar = min(40,length(aux));
+        fprintf(fid2, "      ifile1 = '%s'", aux(1:min(50,length(aux))));
+        idxChar = min(50,length(aux));
+        count = 1;
         while idxChar < length(aux)
-            fprintf(fid2, "//\n     1 '%s'", aux(idxChar+1:min(idxChar+40,length(aux))));
-            idxChar = min(idxChar+40,length(aux));
+            fprintf(fid2, "//\n     %d '%s'",count, aux(idxChar+1:min(idxChar+50,length(aux))));
+            idxChar = min(idxChar+50,length(aux));
+            count = count +1;
         end
         fprintf(fid2,"\n"); 
         fprintf(fid2,"c end data path\n");

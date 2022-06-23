@@ -82,7 +82,7 @@ c     2           GM=3986004.415d8,ae=6378136.3d0,,
 c Variables for input arguments. These variables should not be used in
 c the main program.
    	integer ia,nargs,iargc,ic1,ic2
-   	character*80 tbuf,cha,ifile1,ifile2,ofile1
+   	character*150 tbuf,cha,ifile1,ifile2,ofile1
    	logical io(20)
 
 c ------------------------------------------------------------------------------
@@ -102,8 +102,9 @@ c Set parameters
 c the code between begin and end below is automaticaly generated, do not
 c change the structure
 c begin data path
-      ifile1 = '/mnt/nfs/home/lpedroso/Desktop/osculatin'//
-     1 'g2mean/data/egm96_degree360.ascii'
+      ifile1 = '/mnt/nfs/home/lpedroso/Desktop/DDELQR_StarlinkCons'//
+     1 'tellation/src-osculating2mean/data/egm96_degree360'//
+     2 '.ascii'
 c end data path
 
 c ------------------------------------------------------------------------------
