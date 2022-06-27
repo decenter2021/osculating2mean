@@ -30,7 +30,7 @@ function [OEosc] = OEMeanEUK2OEOsc(t_tdb,OEMean,degree)
     % Perturbations of J2 first order 
     EUPerturbation  = EcksteinUstinovPerturbations(OEMean);
     % Compute geopotentential perturbations
-    dOE = KaulaGeopotentialPerturbations(t_tdb,OEMean_EU,degree);
+    dOE = KaulaGeopotentialPerturbations(t_tdb,OEMean,degree);
     da = dOE(1);
     de = dOE(2);
     di = dOE(3);
