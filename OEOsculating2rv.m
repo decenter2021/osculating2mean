@@ -1,9 +1,15 @@
-% OE to r,v
+%% Package: osculating2mean
+% Author: Leonardo Pedroso
+%% Function OEOsculating2rv
+% Input: OE: a, u (mean anomaly + arg perigee), ex, ey, i, longitude of asceding node
+% Output: x: 6x1 position-velocity vector
+% Adaptation of Algorithm RANDV in [1, pp. 151] for near-circular
+% orbits.
+%% References
+% [1] Vallado, D.A., 1997. Fundamentals of astrodynamics and applications.
+% McGraw-Hill.
+%% Implementation
 function [x] = OEOsculating2rv(OE)
-    %% Input/Output 
-    % Cf. Vallado1997 pp. 146-147
-    % Input: OE
-    % Output: r0 (m) and v0 (m/s)
     %% Define constants
     mu = 3.986004418e14; %(m^3s^2)
     %% Compute r,v for circular inclined OE
@@ -13,18 +19,16 @@ function [x] = OEOsculating2rv(OE)
     i = OE(5);
     Omega = OE(6);
     p = a*(1-e^2);
-    
-    %% Vallado 1997 Algorithm 6.
+    %% (Vallado,1997) Algorithm 6
     if e < 1e3*eps
         omega = 0;
         nu = u;
     else
         omega = atan2(OE(4),OE(3));
         M = u-omega;
-        E = keplerEq(M,e,1e3*eps);
+        E = KepEqtnE(M,e,1e3*eps);
         nu = 2*atan(sqrt((1+e)/(1-e))*tan(E/2));
-    end
-    
+    end    
     rPQW = [p*cos(nu)/(1+e*cos(nu)); p*sin(nu)/(1+e*cos(nu));0];
     vPQW = [-sqrt(mu/p)*sin(nu); sqrt(mu/p)*(e+cos(nu));0];
     T = zeros(3,3);
@@ -40,4 +44,30 @@ function [x] = OEOsculating2rv(OE)
     x = zeros(6,1);
     x(1:3) = T*rPQW;
     x(4:6) = T*vPQW;
+end
+
+%% Function keplerEq
+% Input: M: mean anomaly
+%        e: eccentricity
+%        epsl: tolerance 
+% Output: E: eccentric anomaly
+% Algorithm KepEqtnE in [1, pp. 232]
+%% References
+% [1] Vallado, D.A., 1997. Fundamentals of astrodynamics and applications.
+% McGraw-Hill.
+%% Implementation
+function E = KepEqtnE(M,e,epsl)
+    if (M > -pi && M < 0 ) || M > pi
+        E_n1 = M-e;
+    else
+        E_n1 = M+e;
+    end
+    while true
+        E_n = E_n1;
+        E_n1 = E_n + (M-E_n+e*sin(E_n))/(1-e*cos(E_n));
+        if abs(E_n1-E_n) < epsl
+            E = E_n1;
+            break;
+        end
+    end
 end
