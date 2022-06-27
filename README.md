@@ -62,7 +62,7 @@ Important notes:
 
 ## 📖 Documentation
 The documentation is divided into the following categories:
-- [Osculating elements from position-vector](#osculating-elements-from-position-vector)
+- [Osculating elements from/to position-vector](#osculating-elements-fromto-position-vector)
 - [Eckstein-Ustinov J2 Perturbations](#eckstein-ustinov-j2-perturbations)
 - [Kaula Spherical Harmonics Geopotential Perturbations](#kaula-spherical-harmonics-geopotential-perturbations)
 
