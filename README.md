@@ -70,11 +70,11 @@ The documentation is divided into the following categories:
 
 To compute the **osculating orbital elements** from a **position-velocity** vector use
 ```
-OE = rv2OEOsculating(x)
+OE = rv2OEOsc(x)
 ```
 and to compute the **position-velocity** vector from **osculating orbital elements** use 
 ```
-x = OEOsculating2rv(OE)
+x = OEOsc2rv(OE)
 ```
 where ```x``` is a $6\times 1$ **position-velocity** vector in **SI units** and ``OE`` is a $6\times 1$ vector of **non-singular orbital elements**, for near-circular orbits, *i.e.*, 
  - $a$: semi-major axis [m]
@@ -95,7 +95,7 @@ where ```x``` is a $6\times 1$ **position-velocity** vector in **SI units** and 
 >    0.0028;
 >    0.0042;
 >    0.0056];
->>> OE = rv2OEOsculating(x);
+>>> OE = rv2OEOsc(x);
 >>> OE(1)
 >ans =
 >   6.9195e+06
@@ -106,7 +106,7 @@ where ```x``` is a $6\times 1$ **position-velocity** vector in **SI units** and 
 >   -0.0004
 >    0.9249
 >    6.2728
->>> x = OEOsculating2rv(OE)
+>>> x = OEOsc2rv(OE)
 >x =
 >   1.0e+06 *
 > 
