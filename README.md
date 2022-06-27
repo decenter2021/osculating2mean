@@ -86,6 +86,13 @@ where ```x``` is a $6\times 1$ **position-velocity** vector in **SI units** and 
  
  Implementation of these functions was adapted from [(Vallado, 1997)](#-references).
  
+To adjust the maximum number of iterations and convergence criteria of the numerical solution of the Kepler equation in ```OEOsc2rv```, it is also possible to set additional arguments 
+```
+x = OEOsc2rv(OE, MaxIt, epsl)
+```
+For more details, see the thorough comments in the source code of this function.
+ 
+ 
 >Example: *compute the osculating orbital elements from/to a position-velocity vector*
 >```
 >>> x = 1.0e+06 * ...
