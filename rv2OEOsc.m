@@ -1,6 +1,6 @@
 %% Package: osculating2mean
 % Author: Leonardo Pedroso
-%% Function rv2OEOsculating
+%% Function rv2OEOsc
 % Input: x: 6x1 position-velocity vector
 % Output: OE: a, u (mean anomaly + arg perigee), ex, ey, i, longitude of asceding node
 % Adaptation of Algorithm ELORB in [1, pp. 146-147] for near-circular
@@ -9,7 +9,7 @@
 % [1] Vallado, D.A., 1997. Fundamentals of astrodynamics and applications.
 % McGraw-Hill.
 %% Implementation
-function [OE] = rv2OEOsculating(x)
+function [OE] = rv2OEOsc(x)
     %% Input
     r0 = x(1:3);
     v0 = x(4:6);

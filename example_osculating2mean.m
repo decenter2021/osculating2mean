@@ -11,7 +11,7 @@ Ts = 10; %(s)
 % Compute osculating orbital elements 
 OE_osc = zeros(6,size(x,2));
 for t = 1:size(x,2)
-    OE_osc(:,t) = rv2OEOsculating(x(:,t));
+    OE_osc(:,t) = rv2OEOsc(x(:,t));
 end
 
 % Compute mean orbital elements 
@@ -19,8 +19,8 @@ OE_mean_EcksteinUstinov = zeros(6,size(x,2));
 OE_mean_EcksteinUstinovKaula = zeros(6,size(x,2));
 degree = 10;
 for t = 1:size(x,2)
-    OE_mean_EcksteinUstinov(:,t) = rv2OEMeanEcksteinUstinov(x(:,t));
-    OE_mean_EcksteinUstinovKaula(:,t) = rv2OEMeanEcksteinUstinovKaula((t-1)*Ts,x(:,t),degree);
+    OE_mean_EcksteinUstinov(:,t) = OEOsc2OEMeanEU(OE_osc(:,t));
+    OE_mean_EcksteinUstinovKaula(:,t) = OEOsc2OEMeanEUK((t-1)*Ts,OE_osc(:,t),degree);
 end
 
 %% Plot results

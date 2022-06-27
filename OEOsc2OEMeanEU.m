@@ -1,7 +1,7 @@
 %% Package: osculating2mean
 % Author: Leonardo Pedroso
-%% Function rv2OEMeanEU
-% Input: x: 6x1 position-velocity vector
+%% Function OEOsc2OEMeanEU
+% Input: osculating OE: a, u (mean anomaly + arg perigee), ex, ey, i, longitude of asceding node
 % Output: mean OE: a, u (mean anomaly + arg perigee), ex, ey, i, longitude of asceding node
 %% Description
 % Main steps:
@@ -18,7 +18,7 @@
 % due to any zonal and tesseral harmonics of the geopotential for 
 % nearly-circular satellite orbits, ESOC, ESRO SR-13 (1970).
 %% Implementation
-function OEMean = rv2OEMeanEcksteinUstinov(x, MaxIt, epslPos, epslVel)
+function OEMean = OEOsc2OEMeanEU(OEosc, MaxIt, epslPos, epslVel)
     % Set default parameter if they were not set 
     if nargin < 2 || isempty(MaxIt)
         MaxIt = 100;
@@ -29,8 +29,8 @@ function OEMean = rv2OEMeanEcksteinUstinov(x, MaxIt, epslPos, epslVel)
     if nargin < 4 || isempty(epslVel)
         epslVel = 1e-4; % (m/s)
     end
-    % Compute osculating parameters
-    OEosc = rv2OEOsculating(x);
+    % Compute position-velocity vector
+    x = OEOsc2rv(OEosc);
     % 1. Iterative computation of the J2-induced first second-order 
     %    perturbations and the extraction of the J2-mean elements with 
     %    Eckstein-Ustinov theory with method proposed in [2]
@@ -45,7 +45,7 @@ function OEMean = rv2OEMeanEcksteinUstinov(x, MaxIt, epslPos, epslVel)
         OEoscIt = OEMean + EUPerturbation;
         OEMean = OEosc - EUPerturbation;   
         % Check stopping criterion
-        xIt = OEOsculating2rv(OEoscIt);
+        xIt = OEOsc2rv(OEoscIt);
         status(1,i) = norm(xIt(1:3)-x(1:3));
         status(2,i) = norm(xIt(4:6)-x(4:6));
         if norm(xIt(1:3)-x(1:3)) < epslPos && norm(xIt(4:6)-x(4:6)) < epslVel

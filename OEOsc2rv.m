@@ -1,6 +1,6 @@
 %% Package: osculating2mean
 % Author: Leonardo Pedroso
-%% Function OEOsculating2rv
+%% Function OEOsc2rv
 % Input: OE: a, u (mean anomaly + arg perigee), ex, ey, i, longitude of asceding node
 % Output: x: 6x1 position-velocity vector
 % Adaptation of Algorithm RANDV in [1, pp. 151] for near-circular
@@ -9,7 +9,7 @@
 % [1] Vallado, D.A., 1997. Fundamentals of astrodynamics and applications.
 % McGraw-Hill.
 %% Implementation
-function [x] = OEOsculating2rv(OE)
+function [x] = OEOsc2rv(OE)
     %% Define constants
     mu = 3.986004418e14; %(m^3s^2)
     %% Compute r,v for circular inclined OE

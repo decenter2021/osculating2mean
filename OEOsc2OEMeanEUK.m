@@ -1,8 +1,8 @@
 %% Package: osculating2mean
 % Author: Leonardo Pedroso
-%% Function rv2OEMeanEU
+%% Function OEOsc2OEMeanEUK
 % Input: t_tdb: dynamic baricentric time since J2000 (s)
-%        x: 6x1 position-velocity vector
+%        OEOsc: osculating OE: a, u (mean anomaly + arg perigee), ex, ey, i, longitude of asceding node
 %        degree: maximum degree of spherical harmonics geopotential model
 % Output: mean OE: a, u (mean anomaly + arg perigee), ex, ey, i, longitude of asceding node
 %% Description
@@ -29,13 +29,11 @@
 % ROCSAT-2 and COSMIC missions. Computers & geosciences, 28(3), pp.357-367.
 %% Implementation
 
-function [OEMean] = rv2OEMeanEcksteinUstinovKaula(t_tdb,x,degree)
-    % Compute osculating parameters
-    OEosc = rv2OEOsculating(x);
+function [OEMean] = OEOsc2OEMeanEUK(t_tdb,OEosc,degree)
     % Iterative computation of the J2-induced first second-order 
     % perturbations and the extraction of the J2-mean elements with 
     % Eckstein-Ustinov theory with method proposed in [1]
-    OEMean_EU = rv2OEMeanEcksteinUstinov(x);
+    OEMean_EU = OEOsc2OEMeanEU(OEosc);
     % Compute geopotentential perturbations
     dOE = KaulaGeopotentialPerturbations(t_tdb,OEMean_EU,degree);
     da = dOE(1);
