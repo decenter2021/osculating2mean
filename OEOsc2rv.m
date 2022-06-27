@@ -9,7 +9,14 @@
 % [1] Vallado, D.A., 1997. Fundamentals of astrodynamics and applications.
 % McGraw-Hill.
 %% Implementation
-function [x] = OEOsc2rv(OE)
+function [x] = OEOsc2rv(OE,MaxIt,epsl)
+    %% Set default parameter if they were not set 
+    if nargin < 2 || isempty(MaxIt)
+        MaxIt = 100;
+    end
+    if nargin < 3 || isempty(epsl)
+        epsl = 1e-5; % (m)
+    end    
     %% Define constants
     mu = 3.986004418e14; %(m^3s^2)
     %% Compute r,v for circular inclined OE
@@ -20,13 +27,13 @@ function [x] = OEOsc2rv(OE)
     Omega = OE(6);
     p = a*(1-e^2);
     %% (Vallado,1997) Algorithm 6
-    if e < 1e3*eps
+    if e < 1e-5
         omega = 0;
         nu = u;
     else
         omega = atan2(OE(4),OE(3));
         M = u-omega;
-        E = KepEqtnE(M,e,1e3*eps);
+        E = KepEqtnE(M,e,MaxIt,epsl);
         nu = 2*atan(sqrt((1+e)/(1-e))*tan(E/2));
     end    
     rPQW = [p*cos(nu)/(1+e*cos(nu)); p*sin(nu)/(1+e*cos(nu));0];
@@ -56,18 +63,25 @@ end
 % [1] Vallado, D.A., 1997. Fundamentals of astrodynamics and applications.
 % McGraw-Hill.
 %% Implementation
-function E = KepEqtnE(M,e,epsl)
+function E = KepEqtnE(M,e,MaxIt,epsl)
     if (M > -pi && M < 0 ) || M > pi
         E_n1 = M-e;
     else
         E_n1 = M+e;
     end
+    count = 0;
     while true
         E_n = E_n1;
         E_n1 = E_n + (M-E_n+e*sin(E_n))/(1-e*cos(E_n));
         if abs(E_n1-E_n) < epsl
             E = E_n1;
             break;
+        end
+        count = count +1;
+        if count >= MaxIt
+            E = E_n1;
+            warning('Maximum number of iterations for KepEqtnE reached.');
+            break;      
         end
     end
 end
