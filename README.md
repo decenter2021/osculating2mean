@@ -196,13 +196,17 @@ The [EGM96 NASA GSFC and NIMA Joint Geopotential Model](https://cddis.nasa.gov/9
 
 The backbone of this function is implemented in FORTRAN, whose source code is based on the programs published in [(Hwang and Hwang, 2002)](#-references). The FORTRAN code is called from MATLAB using a MEX function. 
 
-To convert from position-velocity (or, equivalently, osculating orbital elements) to mean orbital elements, taking into account the spherical harmonics geopotential perturbations use 
+To convert from *mean orbital elements* to osculating orbital elements (or, equivalently, position-velocity ) taking into account the **spherical harmonics geopotential** perturbations use
 ```
-OEMean = rv2OEMeanEcksteinUstinovKaula(t_tdb,x,degree) 
+OEOsc = OEMeanEUK2OEOsc(t_tdb,OEMean,degree) 
 ```
-where the arguments are the same as those of function ```KaulaGeopotentialPerturbations``` and ```OEMean``` is a $6\times 1$ vector of **non-singular mean orbital elements**, for near-circular orbits.
+and to convert from position-velocity (or, equivalently, osculating orbital elements) to mean orbital elements, taking into account the spherical harmonics geopotential perturbations use 
+```
+OEMean = OEOsc2OEMeanEUK(t_tdb,x,degree) 
+```
+where the arguments ```t_tdb```and ```degree``` are the same as those of function ```KaulaGeopotentialPerturbations```, ```OEOsc``` is a $6\times 1$ vector of **non-singular osculating orbital elements** for near-circular orbits and ``OEMean`` is a $6\times 1$ vector of **non-singular mean orbital elements** for near-circular orbits, both in **SI units**.
  
-This conversion is performed in 3 steps as proposed in [(Spiridonova, Kirschner and Hugentobler, 2014)](#-references):
+The conversion from osculating to mean orbital elements is performed in 3 steps as proposed in [(Spiridonova, Kirschner and Hugentobler, 2014)](#-references):
 - Iteratively compute the mean orbital elements taking into account the Eckstein-Ustinov J2 perturbations
 - Compute the Kaula geopotential perturbations corresponding to the Eckstein-Ustinov mean orbital elements 
 - Compute the mean orbital elements by subtracting the perturbations to the osculating orbital elements
@@ -216,7 +220,8 @@ This conversion is performed in 3 steps as proposed in [(Spiridonova, Kirschner 
 >    0.0028;
 >    0.0042;
 >    0.0056];
->>> OEMean = rv2OEMeanEcksteinUstinovKaula(11100,x,10)
+>>> OEOsc = rv2OEOsc(x);
+>>> OEMean = OEOsc2OEMeanEUK(11100,OEOsc,10);
 >>> OEMean(1)
 >ans =
 >   6.9150e+06
@@ -227,6 +232,17 @@ This conversion is performed in 3 steps as proposed in [(Spiridonova, Kirschner 
 >   -0.0000
 >    0.9247
 >    6.2730
+>>> OEOsc = OEMeanEUK2OEOsc(11100,OEMean,10);
+>>> OEOsc(1)
+>ans =
+>   6.9195e+06
+>>> OEMean(2:6)
+>ans =
+>    5.9111
+>   -0.0003
+>   -0.0004
+>    0.9249
+>    6.2728
  
 *** 
  
