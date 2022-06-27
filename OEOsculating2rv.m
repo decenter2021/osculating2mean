@@ -46,7 +46,7 @@ function [x] = OEOsculating2rv(OE)
     x(4:6) = T*vPQW;
 end
 
-%% Function keplerEq
+%% Function KepEqtnE
 % Input: M: mean anomaly
 %        e: eccentricity
 %        epsl: tolerance 
