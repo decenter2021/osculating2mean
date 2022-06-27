@@ -66,11 +66,15 @@ The documentation is divided into the following categories:
 - [Eckstein-Ustinov J2 Perturbations](#eckstein-ustinov-j2-perturbations)
 - [Kaula Spherical Harmonics Geopotential Perturbations](#kaula-spherical-harmonics-geopotential-perturbations)
 
-### Osculating elements from position-vector
+### Osculating elements from/to position-vector
 
-To compute the **osculating orbital elements** from a **position-velocity** vector use the function below.
+To compute the **osculating orbital elements** from a **position-velocity** vector use
 ```
 OE = rv2OEOsculating(x)
+```
+and to compute the **position-velocity** vector from **osculating orbital elements** use 
+```
+x = OEOsculating2rv(OE)
 ```
 where ```x``` is a $6\times 1$ **position-velocity** vector in **SI units** and ``OE`` is a $6\times 1$ vector of **non-singular orbital elements**, for near-circular orbits, *i.e.*, 
  - $a$: semi-major axis [m]
@@ -80,9 +84,9 @@ where ```x``` is a $6\times 1$ **position-velocity** vector in **SI units** and 
  - $i$: inclination [rad]
  - $\Omega$: longitude of ascending node [rad]
  
- Implementation adapted from [(Vallado, 1997)](#-references).
+ Implementation of these functions was adapted from [(Vallado, 1997)](#-references).
  
->Example: *compute the osculating orbital elements from a position-velocity vector*
+>Example: *compute the osculating orbital elements from/to a position-velocity vector*
 >```
 >>> x = 1.0e+06 * ...
 >   [6.4329;
@@ -102,6 +106,16 @@ where ```x``` is a $6\times 1$ **position-velocity** vector in **SI units** and 
 >   -0.0004
 >    0.9249
 >    6.2728
+>>> x = OEOsculating2rv(OE)
+>x =
+>   1.0e+06 *
+> 
+>    6.4329
+>   -1.5777
+>   -2.0041
+>    0.0028
+>    0.0042
+>    0.0056
 
 ***
  
