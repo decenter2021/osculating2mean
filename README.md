@@ -126,16 +126,20 @@ To compute the Eckstein-Ustinov first order perturbations due to $J_2$ use
 EUPerturbations =  EcksteinUstinovPerturbations(OEMean)
 ```
 where ```OEMean``` are the non-singular mean orbital elements for which the perturbation is computed and ```EUPerturbations``` are the perturbations to the mean orbital elements. This function is implemented according to [(Eckstein and Hechler, 1970)](#-references).
- 
-To iteratively convert from position-velocity (or, equivalently, osculating orbital elements) to mean orbital elements, taking into account the Eckstein-Ustinov $J_2$ perturbations use 
+
+To convert from **mean orbital elements** to **osculating orbital elements** (or, equivalently, position-velocity) taking into account the **Eckstein-Ustinov** $J_2$ perturbations use 
 ```
-OEMean = rv2OEMeanEcksteinUstinov(x)
+OEOsc = OEMeanEU2OEOsc(OEMean)
 ```
-where ```x``` is a $6\times 1$ **position-velocity** vector in **SI units** and ``OE`` is a $6\times 1$ vector of **non-singular mean orbital elements**, for near-circular orbits.
+and to iteratively convert from **osculating orbital elements** (or, equivalently, position-velocity) to **mean orbital elements**, taking into account the **Eckstein-Ustinov** $J_2$ perturbations use 
+```
+OEMean = OEOsc2OEMeanEU(OEOsc)
+```
+where ```OEOsc``` is a $6\times 1$ vector of **non-singular osculating orbital elements** for near-circular orbits and ``OEMean`` is a $6\times 1$ vector of **non-singular mean orbital elements** for near-circular orbits, both in **SI units**.
  
 To adjust the maximum number of iterations and convergence criteria, it is also possible to set additional arguments 
 ```
-OEMean = rv2OEMeanEcksteinUstinov(x, MaxIt, epslPos, epslVel)
+OEMean = OEOsc2OEMeanEU(OEOsc, MaxIt, epslPos, epslVel)
 ```
 For more details, see the thorough comments in the source code of this function.
  
@@ -148,7 +152,8 @@ For more details, see the thorough comments in the source code of this function.
 >    0.0028;
 >    0.0042;
 >    0.0056];
->>> OEMean = rv2OEMeanEcksteinUstinov(x);
+>>> OEOsc = rv2OEOsc(x);
+>>> OEMean = OEOsc2OEMeanEU(OEOsc);
 >>> OEMean(1)
 >ans =
 >   6.9150e+06
@@ -159,6 +164,17 @@ For more details, see the thorough comments in the source code of this function.
 >   -0.0000
 >    0.9247
 >    6.2730
+>>> OEOsc = OEMeanEU2OEOsc(OEMean);
+>>> OEOsc(1)
+>ans =
+>   6.9195e+06
+>>> OEMean(2:6)
+>ans =
+>    5.9111
+>   -0.0003
+>   -0.0004
+>    0.9249
+>    6.2728
  
 ***
  
