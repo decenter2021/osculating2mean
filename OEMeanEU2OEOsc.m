@@ -17,4 +17,15 @@ function OEosc = OEMeanEU2OEOsc(OEMean)
     EUPerturbation  = EcksteinUstinovPerturbations(OEMean);
     % Update
     OEosc = OEMean + EUPerturbation;
+    % Fix angles
+    if OEosc(2)>2*pi
+        OEosc(2) = OEosc(2)-floor(OEosc(2)/(2*pi))*2*pi;
+    elseif OEosc(2)<0
+        OEosc(2) = OEosc(2)+ceil(-OEosc(2)/(2*pi))*2*pi;
+    end
+    if OEosc(6)>2*pi
+        OEosc(6) = OEosc(6)-floor(OEosc(6)/(2*pi))*2*pi;
+    elseif OEosc(6)<0
+        OEosc(6) = OEosc(6)+ceil(-OEosc(6)/(2*pi))*2*pi;
+    end
 end

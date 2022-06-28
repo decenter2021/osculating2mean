@@ -48,4 +48,15 @@ function [OEMean] = OEOsc2OEMeanEUK(t_tdb,OEosc,degree)
     % (excentricy correction has a singularity for near-circular orbits)
     OEMean = OEosc - [da; du; 0; 0; di; dOmega]; 
     OEMean(3:4) = OEMean_EU(3:4);
+    % Fix angle ranges
+    if OEMean(2)>2*pi
+        OEMean(2) = OEMean(2)-floor(OEMean(2)/(2*pi))*2*pi;
+    elseif OEMean(2)<0
+        OEMean(2) = OEMean(2)+ceil(-OEMean(2)/(2*pi))*2*pi;
+    end
+    if OEMean(6)>2*pi
+        OEMean(6) = OEMean(6)-floor(OEMean(6)/(2*pi))*2*pi;
+    elseif OEMean(6)<0
+        OEMean(6) = OEMean(6)+ceil(-OEMean(6)/(2*pi))*2*pi;
+    end
 end

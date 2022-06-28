@@ -33,6 +33,12 @@ function [x] = OEOsc2rv(OE,MaxIt,epsl)
     else
         omega = atan2(OE(4),OE(3));
         M = u-omega;
+        % Fix angle difference
+        if M < -pi
+            M = M + (floor(abs(M-pi)/(2*pi)))*2*pi;
+        elseif M > pi
+            M = M - floor((M+pi)/(2*pi))*2*pi;
+        end
         E = KepEqtnE(M,e,MaxIt,epsl);
         nu = 2*atan(sqrt((1+e)/(1-e))*tan(E/2));
     end    
