@@ -6,15 +6,15 @@
 ***
 ## 🚀 Index
 
-- [Description](#-description)
-- [Authors](#-authors)
-- [Contact](#-contact)
-- [Installation](#-installation)
-- [Documentation](#-documentation)
-- [Example](#-example)
-- [Contributing to osculating2mean](#-contributing-to-osculating2mean)
-- [Lincense](#-license)
-- [References](#-references)
+- 💡 [Description](#-description)
+- ✍🏼 [Authors](#-authors)
+- 📞 [Contact](#-contact)
+- 💿 [Installation](#-installation)
+- 📖 [Documentation](#-documentation)
+- 🦆 [Example](#-example)
+- ✨ [Contributing to osculating2mean](#-contributing-to-osculating2mean)
+- 📄 [Lincense](#-license)
+- 💥 [References](#-references)
 
 ***
 
