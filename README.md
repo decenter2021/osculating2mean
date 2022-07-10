@@ -56,9 +56,9 @@ To install **osculating2mean**:
   addpath('[installation directory]/osculating2mean');
   ```
   
-Important notes:
-  - The command ```make_osculating2mean``` must be run in the installation directory. If it is run (either when intalling **osculating2mean** or later) in other directory, the EGM96 model data will not be available.
-  - Ignore the massive dump of warnings when running ```make_osculating2mean``` :)
+> **Note**
+>  - The command ```make_osculating2mean``` must be run in the installation directory. If it is run (either when intalling **osculating2mean** or later) in other directory, the EGM96 model data will not be available.
+>  - Ignore the massive dump of warnings when running ```make_osculating2mean``` :)
   
 ***  
 
