@@ -193,7 +193,7 @@ To compute the spherical harmonics geopotential perturbations to the mean orbita
 ```
 dOE = KaulaGeopotentialPerturbations(t_tdb,OEmean,degree)
 ```
-where ```t_tdb``` is the dynamic baricentric time since J200 in seconds, ```OEMean``` are the non-singular mean orbital elements for which the perturbation is computed, ```degree``` is the maximum degree of the spherical harmonics geopotential model, and ```dOE``` are the perturbations to the following ordered set of orbital elements:
+where ```t_tdb``` is the dynamic baricentric time since J2000 in seconds, ```OEMean``` are the non-singular mean orbital elements for which the perturbation is computed, ```degree``` is the maximum degree of the spherical harmonics geopotential model, and ```dOE``` are the perturbations to the following ordered set of orbital elements:
  - $a$ (semi-major axis) [m]
  - $e$ (excentricity)
  - $i$ (inclination) [rad]
@@ -203,7 +203,7 @@ where ```t_tdb``` is the dynamic baricentric time since J200 in seconds, ```OEMe
  
 The [EGM96 NASA GSFC and NIMA Joint Geopotential Model](https://cddis.nasa.gov/926/egm96/) is used.
 
-The backbone of this function is implemented in FORTRAN, whose source code is based on the programs published in [(Hwang and Hwang, 2002)](#-references). The FORTRAN code is called from MATLAB using a MEX function. 
+The backbone of this function is implemented in FORTRAN, whose source code is based on the framework of [(Hwang, 2001)](#-references) and the programs published in [(Hwang and Hwang, 2002)](#-references). The FORTRAN code is called from MATLAB using a MEX function. 
 
 To convert from *mean orbital elements* to osculating orbital elements (or, equivalently, position-velocity ) taking into account the **spherical harmonics geopotential** perturbations use
 ```
@@ -303,9 +303,11 @@ To contribute to **osculating2mean**
 
   
 Eckstein, M.C., Hechler, H., 1970. A reliable derivation of the perturbations due to any zonal and tesseral harmonics of the geopotential for nearly-circular satellite orbits, ESOC, ESRO SR-13.
-  
-<a href="https://doi.org/10.1016/S0098-3004(01)00053-X">Hwang, C. and Hwang, L.S., 2002. Satellite orbit error due to geopotential model error using perturbation theory: applications to ROCSAT-2 and COSMIC missions. Computers & geosciences, 28(3), pp.357-367.</a>
  
+<a href="https://doi.org/10.1007/s001900100159">Hwang, C., 2001. Gravity recovery using COSMIC GPS data: application of orbital perturbation theory. Journal of Geodesy, 75(2), pp.117-136.</a>
+ 
+<a href="https://doi.org/10.1016/S0098-3004(01)00053-X">Hwang, C. and Hwang, L.S., 2002. Satellite orbit error due to geopotential model error using perturbation theory: applications to ROCSAT-2 and COSMIC missions. Computers & geosciences, 28(3), pp.357-367.</a>
+  
 Kaula, W.M., 2013. Theory of satellite geodesy: applications of satellites to geodesy. Courier Corporation.
 
 <a href="https://elib.dlr.de/103814/1/Spiridonova_ISSFD_2014_upd.pdf">Spiridonova, S., Kirschner, M. and Hugentobler, U., 2014. Precise mean orbital elements determination for LEO monitoring and maintenance.</a>
