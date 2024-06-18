@@ -26,6 +26,18 @@ The [EGM96 NASA GSFC and NIMA Joint Geopotential Model](https://cddis.nasa.gov/9
 
 This package was developed for **non-singular** orbital elements, for **near-circular** orbits, but it may be expanded to general orbits easily. 
 
+---
+This repository is part of the work
+<p align="justify">
+<a href="https://www.sciencedirect.com/science/article/pii/S0967066123002976">L. Pedroso and P. Batista, Distributed decentralized receding horizon control for very large-scale networks with application to satellite mega-constellations, Control Engineering Practice, vol. 141, pp. 105728, 2023. doi: 10.1016/j.conengprac.2023.105728.</a>
+</p>
+and based on
+<p align="justify">
+<a href="https://doi.org/10.1016/S0098-3004(01)00053-X">Hwang, C. and Hwang, L.S., 2002. Satellite orbit error due to geopotential model error using perturbation theory: applications to ROCSAT-2 and COSMIC missions. Computers & geosciences, 28(3), pp.357-367.</a>
+</p>
+
+If you use this repository, please [reference](#-references) the publications above.
+
 ***
 
 ## ✍🏼 Authors 
@@ -301,6 +313,19 @@ To contribute to **osculating2mean**
 ## 💥 References 
 <p align="justify">
 
+<a href="https://www.sciencedirect.com/science/article/pii/S0967066123002976">L. Pedroso and P. Batista, Distributed decentralized receding horizon control for very large-scale networks with application to satellite mega-constellations, Control Engineering Practice, vol. 141, pp. 105728, 2023. doi: 10.1016/j.conengprac.2023.105728.</a>
+
+~~~BibTeX
+@article{PedrosoBatista2023DistributedRHC,
+	author = {Leonardo Pedroso and Pedro Batista},
+	title = {Distributed decentralized receding horizon control for very large-scale networks with application to satellite mega-constellations},
+	journal = {Control Engineering Practice},
+	year = {2023},
+	volume = {141},
+	pages = {105728},
+	doi = {10.1016/j.conengprac.2023.105728}
+}
+~~~
   
 Eckstein, M.C., Hechler, H., 1970. A reliable derivation of the perturbations due to any zonal and tesseral harmonics of the geopotential for nearly-circular satellite orbits, ESOC, ESRO SR-13.
  
